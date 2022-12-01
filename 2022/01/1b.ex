@@ -13,4 +13,10 @@ defmodule Solution do
   defp put_elf_sum([a, b, c], n), do: [a, b, c, n] |> Enum.sort(&(&1 >= &2)) |> Enum.slice(0..2)
 end
 
+defmodule Solution2 do
+  def max_elfs(list),
+    do: list |> Enum.map(&Enum.sum/1) |> Enum.sort(&(&1 >= &2)) |> Enum.slice(0..2) |> Enum.sum()
+end
+
 IO.puts("max 3 elfs are carrying #{Solution.max_elfs(lines)} calories")
+IO.puts("max 3 elfs are carrying #{Solution2.max_elfs(lines)} calories")
