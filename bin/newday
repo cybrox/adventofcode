@@ -28,10 +28,12 @@ lines =
   |> String.split("\n", trim: true)
 
 defmodule Solution do
-  
+  def solve(lines) do
+    lines
+  end
 end
 
-IO.inspect(lines)
+IO.inspect(Solution.solve(lines), limit: :infinity, charlists: :as_lists)
 END
 )
 
