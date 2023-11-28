@@ -1,3 +1,2 @@
-# Advent of Code
-Solving the advent of code puzzles in Elixir
-
+# AdventOfCode
+AdvenOfCode puzzles solved in Elixir
