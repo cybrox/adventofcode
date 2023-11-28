@@ -58,6 +58,7 @@ defmodule Mix.Tasks.Runday do
     end
 
     # Solve the puzzle (...hopefully)
-    apply(target_module, :solve, [File.read!(input_file)])
+    inspect_otps = [limit: :infinity, printable_limit: :infinity, charlists: :as_lists]
+    IO.inspect(apply(target_module, :solve, [File.read!(input_file)]), inspect_otps)
   end
 end
