@@ -9,9 +9,8 @@ defmodule AdventOfCode.Puzzles.Year2015.Day02 do
     def solve(input) do
       data =
         input
-        |> Input.trim_input()
-        |> Input.split_by_line()
-        |> Input.split_by_character("x", &String.to_integer/1)
+        |> Input.split_by_line(trim: true)
+        |> Input.split_by_char("x", mapper: &String.to_integer/1)
 
       Enum.reduce(data, 0, fn [l, w, h], acc ->
         acc + surface_area(l, w, h) + smallest_side(l, w, h)
@@ -32,9 +31,8 @@ defmodule AdventOfCode.Puzzles.Year2015.Day02 do
     def solve(input) do
       data =
         input
-        |> Input.trim_input()
-        |> Input.split_by_line()
-        |> Input.split_by_character("x", &String.to_integer/1)
+        |> Input.split_by_line(trim: true)
+        |> Input.split_by_char("x", mapper: &String.to_integer/1)
 
       Enum.reduce(data, 0, fn [l, w, h], acc ->
         acc + shortest_perimiter(l, w, h) + volume(l, w, h)

@@ -8,9 +8,8 @@ defmodule AdventOfCode.Puzzles.Year2015.Day01 do
     def solve(input) do
       data =
         input
-        |> Input.trim_input()
-        |> Input.split_by_character()
-        |> Input.remove_empty()
+        |> Input.clean_trim()
+        |> Input.split_by_char("", trim: true)
 
       traverse_foors(data, 0)
     end
@@ -33,9 +32,8 @@ defmodule AdventOfCode.Puzzles.Year2015.Day01 do
     def solve(input) do
       data =
         input
-        |> Input.trim_input()
-        |> Input.split_by_character()
-        |> Input.remove_empty()
+        |> Input.clean_trim()
+        |> Input.split_by_char("", trim: true)
 
       traverse_foors(data, 0, 1)
     end
