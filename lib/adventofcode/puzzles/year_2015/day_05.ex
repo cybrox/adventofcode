@@ -74,7 +74,8 @@ defmodule AdventOfCode.Puzzles.Year2015.Day05 do
 
     # Check if a string has at least two non-overlapping character tuples
     # To achieve this, we shift through the string and generate a list of all possible two-letter
-    # combinations.
+    # combinations. Once we reach the end of the string, we group the list by the different chunks
+    # and see if any of them occur more than twice. For the ones that do, we check their spacing.
     defp has_two_letter_tuples?(_input, acc \\ [])
 
     defp has_two_letter_tuples?(<<_::binary-size(1)>>, acc) do
@@ -82,14 +83,17 @@ defmodule AdventOfCode.Puzzles.Year2015.Day05 do
       |> Enum.with_index()
       |> Enum.group_by(fn {chunk, _i} -> chunk end)
       |> Enum.filter(fn {_chunk, occurences} -> Enum.count(occurences) >= 2 end)
-      |> Enum.any?(fn {_chunk, occurences} -> valid_occurences?(occurences) end)
+      |> Enum.any?(fn {_chunk, occurences} -> valid_spacing?(occurences) end)
     end
 
     defp has_two_letter_tuples?(input, acc) do
       has_two_letter_tuples?(String.slice(input, 1..-1), [String.slice(input, 0..1) | acc])
     end
 
-    defp valid_occurences?(occurences) do
+    # The spacing between two repeating chunks is deemed valid, when it is greated than one.
+    # This means "aaa" does not match the requirement for two "aa" chunks, because chunkt one
+    # will begin at index 0 and chunk two at index 1 (overlapping), which fails this check.
+    defp valid_spacing?(occurences) do
       indices =
         occurences
         |> Enum.map(fn {_chunk, i} -> i end)
