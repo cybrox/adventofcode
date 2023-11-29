@@ -8,7 +8,7 @@ defmodule YearTestGenerator do
   end
 
   defp generate_test_block(parent_module, solution) do
-    {{:__aliases__, _, [_testee, day, part]}, expected_result} = solution
+    {{:__aliases__, _, [day, part]}, expected_result} = solution
     {:__aliases__, _, parent_segments} = parent_module
 
     target_module =

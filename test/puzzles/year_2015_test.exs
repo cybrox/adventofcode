@@ -8,10 +8,10 @@ defmodule AdventOfCode.Puzzles.Year2015Test do
     YearTestGenerator.generate_test_blocks(
       AdventOfCode.Puzzles.Year2015,
       [
-        {Testee.Day01.PartA, 280},
-        {Testee.Day01.PartB, 1797},
-        {Testee.Day02.PartA, 1_586_300},
-        {Testee.Day02.PartB, 3_737_498}
+        {Day01.PartA, 280},
+        {Day01.PartB, 1797},
+        {Day02.PartA, 1_586_300},
+        {Day02.PartB, 3_737_498}
       ]
     )
   end
