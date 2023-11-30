@@ -25,7 +25,10 @@ defmodule YearTestGenerator do
     input_file = Path.join([priv_dir_path, input_path, "input.txt"])
     load_path = Path.relative_to(input_file, priv_dir_path)
 
+    skip_tag = if System.get_env("RUN_PUZZLE_TESTS"), do: "puzzle", else: "skip"
+
     quote do
+      @tag unquote(:"#{skip_tag}")
       test unquote("result for #{day} #{part} is correct") do
         input_file = unquote("priv/#{load_path}")
         assert File.exists?(input_file)

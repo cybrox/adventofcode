@@ -3,7 +3,6 @@ defmodule AdventOfCode.Puzzles.Year2015Test do
 
   require YearTestGenerator
 
-  @tag :skip
   describe "solutions for year 2015" do
     YearTestGenerator.generate_test_blocks(
       AdventOfCode.Puzzles.Year2015,
