@@ -1,4 +1,4 @@
-defmodule InputTest do
+defmodule AdventOfCode.Common.InputTest do
   use ExUnit.Case, async: true
 
   alias AdventOfCode.Common.Input, as: Testee
