@@ -30,6 +30,14 @@ defmodule AdventOfCode.Common.Grid2DTest do
                }
              }
     end
+
+    test "properly creates field with function as default value" do
+      assert Testee.new(2, 2, fn {r, c} -> r + c end) == %G{
+               width: 2,
+               height: 2,
+               fields: %{{0, 0} => 0, {0, 1} => 1, {1, 0} => 1, {1, 1} => 2}
+             }
+    end
   end
 
   #

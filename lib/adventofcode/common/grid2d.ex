@@ -15,13 +15,30 @@ defmodule AdventOfCode.Common.Grid2D do
   """
   def new(width, height, default \\ nil) do
     fields = for x <- 0..(width - 1), do: for(y <- 0..(height - 1), do: {x, y})
-    field_map = fields |> List.flatten() |> Enum.into(%{}, fn p -> {p, default} end)
+
+    field_map =
+      fields
+      |> List.flatten()
+      |> Enum.into(%{}, fn p -> {p, apply_default(default, p)} end)
+
     %G{width: width, height: height, fields: field_map}
   end
 
+  defp apply_default(default, p) when is_function(default), do: default.(p)
+  defp apply_default(default, _), do: default
   #
   # Calculations
   #
+
+  @doc """
+  Assuming the grid unwrapped as a sinle long string, map the index in that
+  string to the coordinates in the actual field
+  """
+  def grid_pos(%G{width: w, height: _h}, n) do
+    y = floor(n / w)
+    x = rem(n, w)
+    {x, y}
+  end
 
   @doc """
   Check whether or not a coordinate exists within the given grid
