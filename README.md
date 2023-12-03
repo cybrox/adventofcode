@@ -98,3 +98,8 @@ defmodule AdventOfCode.Puzzles.Year2015.Day01 do
   end
 end
 ```
+
+### Potentially breaking decisions
+Some puzzle solutions contain comment lines that start with a `[!]`. These are annotations for cases where I either suspect I misunderstood how the puzzle author intended the puzzle to be solved or intentionally sacrificed generality of the solution for simply getting the job done.
+
+Simply put, functions that have `[!]` comments work for my puzzle input but they might not work for yours.
