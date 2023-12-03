@@ -162,6 +162,214 @@ defmodule AdventOfCode.Common.Grid2DTest do
     end
   end
 
+  describe "directional functions" do
+    @test_grid Testee.new(10, 10)
+
+    test "top_of/2 works as expected" do
+      assert Testee.top_of(@test_grid, {0, 0}) == {:error, :outside}
+      assert Testee.top_of(@test_grid, {0, 5}) == {:error, :outside}
+      assert Testee.top_of(@test_grid, {0, 9}) == {:error, :outside}
+      assert Testee.top_of(@test_grid, {1, 9}) == {0, 9}
+      assert Testee.top_of(@test_grid, {5, 2}) == {4, 2}
+      assert Testee.top_of(@test_grid, {9, 9}) == {8, 9}
+    end
+
+    test "top_right_of/2 works as expected" do
+      assert Testee.top_right_of(@test_grid, {0, 0}) == {:error, :outside}
+      assert Testee.top_right_of(@test_grid, {0, 5}) == {:error, :outside}
+      assert Testee.top_right_of(@test_grid, {0, 9}) == {:error, :outside}
+      assert Testee.top_right_of(@test_grid, {1, 9}) == {:error, :outside}
+      assert Testee.top_right_of(@test_grid, {5, 2}) == {4, 3}
+      assert Testee.top_right_of(@test_grid, {9, 9}) == {:error, :outside}
+    end
+
+    test "right_of/2 works as expected" do
+      assert Testee.right_of(@test_grid, {0, 0}) == {0, 1}
+      assert Testee.right_of(@test_grid, {0, 5}) == {0, 6}
+      assert Testee.right_of(@test_grid, {0, 9}) == {:error, :outside}
+      assert Testee.right_of(@test_grid, {1, 9}) == {:error, :outside}
+      assert Testee.right_of(@test_grid, {5, 2}) == {5, 3}
+      assert Testee.right_of(@test_grid, {9, 9}) == {:error, :outside}
+    end
+
+    test "bottom_right_of/2 works as expected" do
+      assert Testee.bottom_right_of(@test_grid, {0, 0}) == {1, 1}
+      assert Testee.bottom_right_of(@test_grid, {0, 5}) == {1, 6}
+      assert Testee.bottom_right_of(@test_grid, {0, 9}) == {:error, :outside}
+      assert Testee.bottom_right_of(@test_grid, {1, 9}) == {:error, :outside}
+      assert Testee.bottom_right_of(@test_grid, {5, 2}) == {6, 3}
+      assert Testee.bottom_right_of(@test_grid, {9, 9}) == {:error, :outside}
+    end
+
+    test "bottom_of/2 works as expected" do
+      assert Testee.bottom_of(@test_grid, {0, 0}) == {1, 0}
+      assert Testee.bottom_of(@test_grid, {0, 5}) == {1, 5}
+      assert Testee.bottom_of(@test_grid, {0, 9}) == {1, 9}
+      assert Testee.bottom_of(@test_grid, {1, 9}) == {2, 9}
+      assert Testee.bottom_of(@test_grid, {5, 2}) == {6, 2}
+      assert Testee.bottom_of(@test_grid, {9, 9}) == {:error, :outside}
+    end
+
+    test "bottom_left_of/2 works as expected" do
+      assert Testee.bottom_left_of(@test_grid, {0, 0}) == {:error, :outside}
+      assert Testee.bottom_left_of(@test_grid, {0, 5}) == {1, 4}
+      assert Testee.bottom_left_of(@test_grid, {0, 9}) == {1, 8}
+      assert Testee.bottom_left_of(@test_grid, {1, 9}) == {2, 8}
+      assert Testee.bottom_left_of(@test_grid, {5, 2}) == {6, 1}
+      assert Testee.bottom_left_of(@test_grid, {9, 9}) == {:error, :outside}
+    end
+
+    test "left_of/2 works as expected" do
+      assert Testee.left_of(@test_grid, {0, 0}) == {:error, :outside}
+      assert Testee.left_of(@test_grid, {0, 5}) == {0, 4}
+      assert Testee.left_of(@test_grid, {0, 9}) == {0, 8}
+      assert Testee.left_of(@test_grid, {1, 9}) == {1, 8}
+      assert Testee.left_of(@test_grid, {5, 2}) == {5, 1}
+      assert Testee.left_of(@test_grid, {9, 9}) == {9, 8}
+    end
+
+    test "top_left_of/2 works as expected" do
+      assert Testee.top_left_of(@test_grid, {0, 0}) == {:error, :outside}
+      assert Testee.top_left_of(@test_grid, {0, 5}) == {:error, :outside}
+      assert Testee.top_left_of(@test_grid, {0, 9}) == {:error, :outside}
+      assert Testee.top_left_of(@test_grid, {1, 9}) == {0, 8}
+      assert Testee.top_left_of(@test_grid, {5, 2}) == {4, 1}
+      assert Testee.top_left_of(@test_grid, {9, 9}) == {8, 8}
+      assert Testee.top_left_of(@test_grid, {9, 0}) == {:error, :outside}
+    end
+
+    test "adjecant_of/2 works as expected" do
+      assert Testee.adjecant_of(@test_grid, {0, 0}) == [
+               {:error, :outside},
+               {0, 1},
+               {1, 0},
+               {:error, :outside}
+             ]
+
+      assert Testee.adjecant_of(@test_grid, {0, 9}) == [
+               {:error, :outside},
+               {:error, :outside},
+               {1, 9},
+               {0, 8}
+             ]
+
+      assert Testee.adjecant_of(@test_grid, {9, 0}) == [
+               {8, 0},
+               {9, 1},
+               {:error, :outside},
+               {:error, :outside}
+             ]
+
+      assert Testee.adjecant_of(@test_grid, {9, 9}) == [
+               {8, 9},
+               {:error, :outside},
+               {:error, :outside},
+               {9, 8}
+             ]
+
+      assert Testee.adjecant_of(@test_grid, {4, 4}) == [
+               {3, 4},
+               {4, 5},
+               {5, 4},
+               {4, 3}
+             ]
+    end
+
+    test "diagonal_of/2 works as expected" do
+      assert Testee.diagonal_of(@test_grid, {0, 0}) == [
+               {:error, :outside},
+               {1, 1},
+               {:error, :outside},
+               {:error, :outside}
+             ]
+
+      assert Testee.diagonal_of(@test_grid, {0, 9}) == [
+               {:error, :outside},
+               {:error, :outside},
+               {1, 8},
+               {:error, :outside}
+             ]
+
+      assert Testee.diagonal_of(@test_grid, {9, 0}) == [
+               {8, 1},
+               {:error, :outside},
+               {:error, :outside},
+               {:error, :outside}
+             ]
+
+      assert Testee.diagonal_of(@test_grid, {9, 9}) == [
+               {:error, :outside},
+               {:error, :outside},
+               {:error, :outside},
+               {8, 8}
+             ]
+
+      assert Testee.diagonal_of(@test_grid, {4, 4}) == [
+               {3, 5},
+               {5, 5},
+               {5, 3},
+               {3, 3}
+             ]
+    end
+
+    test "surrounding_of/2 works as expected" do
+      assert Testee.surrounding_of(@test_grid, {0, 0}) == [
+               {:error, :outside},
+               {0, 1},
+               {1, 0},
+               {:error, :outside},
+               {:error, :outside},
+               {1, 1},
+               {:error, :outside},
+               {:error, :outside}
+             ]
+
+      assert Testee.surrounding_of(@test_grid, {0, 9}) == [
+               {:error, :outside},
+               {:error, :outside},
+               {1, 9},
+               {0, 8},
+               {:error, :outside},
+               {:error, :outside},
+               {1, 8},
+               {:error, :outside}
+             ]
+
+      assert Testee.surrounding_of(@test_grid, {9, 0}) == [
+               {8, 0},
+               {9, 1},
+               {:error, :outside},
+               {:error, :outside},
+               {8, 1},
+               {:error, :outside},
+               {:error, :outside},
+               {:error, :outside}
+             ]
+
+      assert Testee.surrounding_of(@test_grid, {9, 9}) == [
+               {8, 9},
+               {:error, :outside},
+               {:error, :outside},
+               {9, 8},
+               {:error, :outside},
+               {:error, :outside},
+               {:error, :outside},
+               {8, 8}
+             ]
+
+      assert Testee.surrounding_of(@test_grid, {4, 4}) == [
+               {3, 4},
+               {4, 5},
+               {5, 4},
+               {4, 3},
+               {3, 5},
+               {5, 5},
+               {5, 3},
+               {3, 3}
+             ]
+    end
+  end
+
   #
   # Grid manipulation
   #

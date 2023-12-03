@@ -101,6 +101,82 @@ defmodule AdventOfCode.Common.Grid2D do
     |> Enum.filter(fn {_k, v} -> matcher.(v) end)
   end
 
+  @doc """
+  Get the position on top of the passed coordinates on the grid.
+  Returns `{:error, :outside}` when the position is not on the grid.
+  """
+  def top_of(%G{}, {:error, reason}), do: {:error, reason}
+  def top_of(%G{}, {0, _}), do: {:error, :outside}
+  def top_of(%G{}, {r, c}), do: {r - 1, c}
+
+  @doc """
+  Get the position right of the passed coordinates on the grid.
+  Returns `{:error, :outside}` when the position is not on the grid.
+  """
+  def right_of(%G{}, {:error, reason}), do: {:error, reason}
+  def right_of(%G{width: w}, {_, c}) when c >= w - 1, do: {:error, :outside}
+  def right_of(%G{}, {r, c}), do: {r, c + 1}
+
+  @doc """
+  Get the position on the bottom of the passed coordinates on the grid.
+  Returns `{:error, :outside}` when the position is not on the grid.
+  """
+  def bottom_of(%G{}, {:error, reason}), do: {:error, reason}
+  def bottom_of(%G{height: h}, {r, _}) when r >= h - 1, do: {:error, :outside}
+  def bottom_of(%G{}, {r, c}), do: {r + 1, c}
+
+  @doc """
+  Get the position left of the passed coordinates on the grid.
+  Returns `{:error, :outside}` when the position is not on the grid.
+  """
+  def left_of(%G{}, {:error, reason}), do: {:error, reason}
+  def left_of(%G{}, {_, 0}), do: {:error, :outside}
+  def left_of(%G{}, {r, c}), do: {r, c - 1}
+
+  @doc """
+  Get the position on the top right of the passed coordinates on the grid.
+  Returns `{:error, :outside}` when the position is not on the grid.
+  """
+  def top_right_of(%G{} = grid, p), do: top_of(grid, right_of(grid, p))
+
+  @doc """
+  Get the position on the bottom right of the passed coordinates on the grid.
+  Returns `{:error, :outside}` when the position is not on the grid.
+  """
+  def bottom_right_of(%G{} = g, p), do: bottom_of(g, right_of(g, p))
+
+  @doc """
+  Get the position on the bottom left of the passed coordinates on the grid.
+  Returns `{:error, :outside}` when the position is not on the grid.
+  """
+  def bottom_left_of(%G{} = g, p), do: bottom_of(g, left_of(g, p))
+
+  @doc """
+  Get the position on the top left of the passed coordinates on the grid.
+  Returns `{:error, :outside}` when the position is not on the grid.
+  """
+  def top_left_of(%G{} = g, p), do: top_of(g, left_of(g, p))
+
+  @doc """
+  Get the adjecant (top, right, bottom, left) positions of the passed coordinates.
+  Some of these can be `{:error, :outside}` depending on the grid size.
+  """
+  def adjecant_of(%G{} = g, p), do: [top_of(g, p), right_of(g, p), bottom_of(g, p), left_of(g, p)]
+
+  @doc """
+  Get the diagonal (top-right, bottom-right, bottom-left, top-left) positions of
+  the passed coordinates.
+  Some of these can be `{:error, :outside}` depending on the grid size.
+  """
+  def diagonal_of(%G{} = g, p),
+    do: [top_right_of(g, p), bottom_right_of(g, p), bottom_left_of(g, p), top_left_of(g, p)]
+
+  @doc """
+  Get the surrounding (adjecant and diagonal) positions of the passed coordinates.
+  Some of these can be `{:error, :outside}` depending on the grid size.
+  """
+  def surrounding_of(%G{} = g, p), do: adjecant_of(g, p) ++ diagonal_of(g, p)
+
   #
   # Grid manipulation
   #
