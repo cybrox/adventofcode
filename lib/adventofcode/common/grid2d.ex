@@ -3,7 +3,13 @@ defmodule AdventOfCode.Common.Grid2D do
   This module provides a 2D grid data structure that can be used to solve puzzles where
   navigation, movement, and/or coordinates on a 2D grid are required.
   The grid uses the cartesian plane starting at 0/0 by default.
+
+  Instead of X/Y coordinates, we use R/C (row and column) coordinates. This is because it
+  is both easier to read and easier to process when rows are the top-level list, which
+  means coordinates would need to be written as Y/X, which is arguably more confusing than R/C.
   """
+
+  alias AdventOfCode.Common.Input
 
   defmodule G do
     defstruct [:width, :height, :fields]
@@ -14,7 +20,7 @@ defmodule AdventOfCode.Common.Grid2D do
   The default value for each field is `nil` unless another default is provided.
   """
   def new(width, height, default \\ nil) do
-    fields = for x <- 0..(width - 1), do: for(y <- 0..(height - 1), do: {x, y})
+    fields = for r <- 0..(height - 1), do: for(c <- 0..(width - 1), do: {r, c})
 
     field_map =
       fields
@@ -26,18 +32,47 @@ defmodule AdventOfCode.Common.Grid2D do
 
   defp apply_default(default, p) when is_function(default), do: default.(p)
   defp apply_default(default, _), do: default
+
+  @doc """
+  Generate a new 2D grid from an input string.
+  This will determine the width and height based on the number of lines and their length.
+  """
+  def new_from_input(input) do
+    lines = input |> Input.split_by_line(trim: true)
+    width = lines |> Enum.at(0) |> byte_size()
+    height = lines |> Enum.count()
+
+    new(width, height, fn {r, c} -> lines |> Enum.at(r) |> String.at(c) end)
+  end
+
+  @doc """
+  Debug print a field
+  """
+  def debug_print(%G{width: width, height: height, fields: field_map}) do
+    IO.puts("Debug-printing field with width #{width} and height #{height}")
+
+    field_map
+    |> Enum.sort()
+    |> Enum.map(fn {_, v} -> v end)
+    |> Enum.chunk_every(width)
+    |> IO.inspect()
+  end
+
   #
   # Calculations
   #
 
   @doc """
-  Assuming the grid unwrapped as a sinle long string, map the index in that
-  string to the coordinates in the actual field
+  Assuming the grid unwrapped as a single long string, map the index in that
+  string to the coordinates in the actual field. This does not count newlines
+  or any other characters potentially present in a previous input string.
+
+  For a 4x6 grid, the input `10` would yield `{1, 4}` (one full row + four)0
+  This does not verify whether or not the point is possible within the actual
+  grid. This needs to be checked separately with `on_grid?/2`.
   """
   def grid_pos(%G{width: w, height: _h}, n) do
-    y = floor(n / w)
-    x = rem(n, w)
-    {x, y}
+    {floor(n / w), rem(n, w)}
   end
 
   @doc """
@@ -55,6 +90,15 @@ defmodule AdventOfCode.Common.Grid2D do
   """
   def fields_in_between({row_a, col_a}, {row_b, col_b}) do
     for r <- row_a..row_b, c <- col_a..col_b, do: {r, c}
+  end
+
+  @doc """
+  Get a list of fienlds and their contents where the content matches a
+  specific matcher function.
+  """
+  def fields_that_match(%G{fields: fields}, matcher) do
+    fields
+    |> Enum.filter(fn {_k, v} -> matcher.(v) end)
   end
 
   #

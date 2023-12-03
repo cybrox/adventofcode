@@ -29,6 +29,27 @@ defmodule AdventOfCode.Common.Grid2DTest do
                  {2, 2} => nil
                }
              }
+
+      assert Testee.new(1, 3) == %G{
+               width: 1,
+               height: 3,
+               fields: %{
+                 {0, 0} => nil,
+                 {1, 0} => nil,
+                 {2, 0} => nil
+               }
+             }
+
+      assert Testee.new(4, 1) == %G{
+               width: 4,
+               height: 1,
+               fields: %{
+                 {0, 0} => nil,
+                 {0, 1} => nil,
+                 {0, 2} => nil,
+                 {0, 3} => nil
+               }
+             }
     end
 
     test "properly creates field with function as default value" do
@@ -38,11 +59,71 @@ defmodule AdventOfCode.Common.Grid2DTest do
                fields: %{{0, 0} => 0, {0, 1} => 1, {1, 0} => 1, {1, 1} => 2}
              }
     end
+
+    test "properly creates field from a given input" do
+      assert Testee.new_from_input("123\n456") == %G{
+               width: 3,
+               height: 2,
+               fields: %{
+                 {0, 0} => "1",
+                 {0, 1} => "2",
+                 {0, 2} => "3",
+                 {1, 0} => "4",
+                 {1, 1} => "5",
+                 {1, 2} => "6"
+               }
+             }
+
+      assert Testee.new_from_input("a\nb\nc\nd\ne") == %G{
+               width: 1,
+               height: 5,
+               fields: %{
+                 {0, 0} => "a",
+                 {1, 0} => "b",
+                 {2, 0} => "c",
+                 {3, 0} => "d",
+                 {4, 0} => "e"
+               }
+             }
+    end
   end
 
   #
   # Calculations
   #
+
+  describe "grid_pos/2" do
+    test "returns the correct position of an index" do
+      test_grid = Testee.new_from_input("abcdef\nghijkl\nmnopqr\nstuvwx")
+
+      assert Testee.grid_pos(test_grid, 0) == {0, 0}
+      assert Testee.grid_pos(test_grid, 1) == {0, 1}
+      assert Testee.grid_pos(test_grid, 10) == {1, 4}
+      assert Testee.grid_pos(test_grid, 23) == {3, 5}
+      assert Testee.grid_pos(test_grid, 90) == {15, 0}
+    end
+  end
+
+  describe "on_grid?/2" do
+    test "returns true for points that are on the grid" do
+      test_grid = Testee.new(11, 11)
+      assert Testee.on_grid?(test_grid, {0, 0}) == true
+      assert Testee.on_grid?(test_grid, {5, 5}) == true
+      assert Testee.on_grid?(test_grid, {10, 0}) == true
+      assert Testee.on_grid?(test_grid, {10, 10}) == true
+    end
+
+    test "returns false for points that are not on the grid" do
+      test_grid = Testee.new(11, 11)
+      assert Testee.on_grid?(test_grid, {0, -1}) == false
+      assert Testee.on_grid?(test_grid, {-1, 0}) == false
+      assert Testee.on_grid?(test_grid, {-1, -1}) == false
+      assert Testee.on_grid?(test_grid, {10, 11}) == false
+      assert Testee.on_grid?(test_grid, {11, 10}) == false
+      assert Testee.on_grid?(test_grid, {11, 11}) == false
+      assert Testee.on_grid?(test_grid, {2378, -3487}) == false
+    end
+  end
 
   describe "fields_in_between/2" do
     test "properly generates a list of fields between coordinates" do
@@ -70,24 +151,14 @@ defmodule AdventOfCode.Common.Grid2DTest do
     end
   end
 
-  describe "on_grid?/2" do
-    test "returns true for points that are on the grid" do
-      test_grid = Testee.new(11, 11)
-      assert Testee.on_grid?(test_grid, {0, 0}) == true
-      assert Testee.on_grid?(test_grid, {5, 5}) == true
-      assert Testee.on_grid?(test_grid, {10, 0}) == true
-      assert Testee.on_grid?(test_grid, {10, 10}) == true
-    end
+  describe "fields_that_match/2" do
+    test "returns a list of fields that match the specified matcher" do
+      test_grid = Testee.new(10, 10, fn {r, c} -> r * c end)
 
-    test "returns false for points that are not on the grid" do
-      test_grid = Testee.new(11, 11)
-      assert Testee.on_grid?(test_grid, {0, -1}) == false
-      assert Testee.on_grid?(test_grid, {-1, 0}) == false
-      assert Testee.on_grid?(test_grid, {-1, -1}) == false
-      assert Testee.on_grid?(test_grid, {10, 11}) == false
-      assert Testee.on_grid?(test_grid, {11, 10}) == false
-      assert Testee.on_grid?(test_grid, {11, 11}) == false
-      assert Testee.on_grid?(test_grid, {2378, -3487}) == false
+      assert Testee.fields_that_match(test_grid, &(&1 == 0)) |> Enum.count() == 19
+      assert Testee.fields_that_match(test_grid, &(&1 < 10)) |> Enum.count() == 42
+      assert Testee.fields_that_match(test_grid, &(&1 == 9 * 9)) == [{{9, 9}, 9 * 9}]
+      assert Testee.fields_that_match(test_grid, &(&1 > 100)) |> Enum.empty?()
     end
   end
 
