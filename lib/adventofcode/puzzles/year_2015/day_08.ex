@@ -48,7 +48,6 @@ defmodule AdventOfCode.Puzzles.Year2015.Day08 do
 
       data
       |> Enum.map(&get_line_sizes/1)
-      |> IO.inspect()
       |> Enum.reduce(0, fn {old_size, new_size}, acc -> acc + new_size - old_size end)
     end
 
