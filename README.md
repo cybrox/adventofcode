@@ -70,6 +70,8 @@ The `test/puzzles/year_xxxx_test.exs` files will provide tests for a specific ye
 
 To run all puzzles and test their output, run `RUN_PUZZLE_TESTS=true mix test`.
 
+Since AdventOfCode [nicely asks us not to include puzzle inputs](https://adventofcode.com/about#faq_copying), running these tests is only possible for myself. The commited input files are always encrypted using [git-secret](https://sobolevn.me/git-secret/).
+
 ## Additional tidbits
 ### Sharing code between parts
 It is often required to share input parsing or some processing between part A and part B of a day's puzzle. To facilitate this, `AdventOfCode.Common.Shared` can be used, which contains a macro that will import all functions from the shared module in the same day. 

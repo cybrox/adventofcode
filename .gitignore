@@ -27,3 +27,7 @@ adventofcode-*.tar
 
 # Ignore real input files from AoC
 priv/inputs/**/input.txt
+
+# Ignore gitsecret files (AoC inputs)
+.gitsecret/keys/random_seed
+!*.secret
