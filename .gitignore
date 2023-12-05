@@ -25,8 +25,8 @@ adventofcode-*.tar
 # Temporary files, for example, from tests.
 /tmp/
 
-# Ignore real input files from AoC
-priv/inputs/**/input.txt
+# Ignore real input files and examples from AoC
+priv/inputs/**/*.txt
 
 # Ignore gitsecret files (AoC inputs)
 .gitsecret/keys/random_seed
