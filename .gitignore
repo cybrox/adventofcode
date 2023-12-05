@@ -24,3 +24,6 @@ adventofcode-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+# Ignore real input files from AoC
+priv/inputs/**/input.txt
