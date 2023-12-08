@@ -15,10 +15,14 @@ defmodule AdventOfCode.Puzzles.Year2023Test do
         {Day03.PartB, 84_051_670},
         {Day04.PartA, 28538},
         {Day04.PartB, 9_425_061},
+        {Day05.PartA, 379_811_651},
+        {Day05.PartB, 27_992_443},
         {Day06.PartA, 1_159_152},
         {Day06.PartB, 41_513_103},
         {Day07.PartA, 250_232_501},
-        {Day07.PartB, 249_138_943}
+        {Day07.PartB, 249_138_943},
+        {Day08.PartA, 11309},
+        {Day08.PartB, 13_740_108_158_591}
       ]
     )
   end
