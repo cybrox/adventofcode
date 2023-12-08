@@ -19,6 +19,7 @@ defmodule YearTestGenerator do
 
     target_year = parent_segments |> List.last() |> to_string() |> String.slice(4..-1)
     target_day = day |> to_string() |> String.slice(3..-1)
+    target_part = part |> to_string() |> String.slice(-1..-1)
 
     priv_dir_path = :code.priv_dir(:adventofcode)
     input_path = "inputs/year_#{target_year}/day_#{target_day}/"
@@ -27,9 +28,16 @@ defmodule YearTestGenerator do
 
     skip_tag = if System.get_env("RUN_PUZZLE_TESTS"), do: "puzzle", else: "skip"
     day_tag = "#{target_year}-#{target_day}"
+    part_tag = "#{day_tag}-#{target_part}"
+    part_tag_lc = String.downcase(part_tag)
 
     quote do
-      @tag [{unquote(:"#{skip_tag}"), true}, {unquote(:"#{day_tag}"), true}]
+      @tag [
+        {unquote(:"#{skip_tag}"), true},
+        {unquote(:"#{day_tag}"), true},
+        {unquote(:"#{part_tag}"), true},
+        {unquote(:"#{part_tag_lc}"), true}
+      ]
       test unquote("result for #{day} #{part} is correct") do
         input_file = unquote("priv/#{load_path}")
         assert File.exists?(input_file)
