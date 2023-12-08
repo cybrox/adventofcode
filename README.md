@@ -68,7 +68,7 @@ By default, when running `mix test` only unit tests for common modules such as `
 
 The `test/puzzles/year_xxxx_test.exs` files will provide tests for a specific year's puzzles. They utilize a macro defined in the test helper to generate one test case per day and part from a list of day/part and solution pairs.
 
-To run all puzzles and test their output, run `RUN_PUZZLE_TESTS=true mix test`.
+To run all puzzles and test their output, run `RUN_PUZZLE_TESTS=true mix test`. To run specific tests, use `RUN_PUZZLE_TESTS=true mix test --only YYYY-DD` (e.g. `RUN_PUZZLE_TESTS=true mix test --only 2015-01`).
 
 Since AdventOfCode [nicely asks us not to include puzzle inputs](https://adventofcode.com/about#faq_copying), running these tests is only possible for myself. The commited input files are always encrypted using [git-secret](https://sobolevn.me/git-secret/).
 
