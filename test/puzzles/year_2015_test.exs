@@ -32,7 +32,9 @@ defmodule AdventOfCode.Puzzles.Year2015Test do
         {Day12.PartA, 119_433},
         {Day12.PartB, 68466},
         {Day13.PartA, 664},
-        {Day13.PartB, 640}
+        {Day13.PartB, 640},
+        {Day14.PartA, 2660},
+        {Day14.PartB, 1256}
       ]
     )
   end
