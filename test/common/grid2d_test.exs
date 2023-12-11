@@ -104,6 +104,26 @@ defmodule AdventOfCode.Common.Grid2DTest do
     end
   end
 
+  describe "distance/2" do
+    test "correctly returns the distance of two points" do
+      assert Testee.distance({0, 0}, {2, 2}) == {2, 2}
+      assert Testee.distance({2, 2}, {5, 7}) == {3, 5}
+      assert Testee.distance({2, 2}, {5, 0}) == {3, -2}
+      assert Testee.distance({2, 2}, {0, 7}) == {-2, 5}
+      assert Testee.distance({2, 2}, {0, 0}) == {-2, -2}
+    end
+  end
+
+  describe "mhdistance/2" do
+    test "correctly returns the manhattan distance of two points" do
+      assert Testee.mh_distance({0, 0}, {2, 2}) == 4
+      assert Testee.mh_distance({2, 2}, {5, 7}) == 8
+      assert Testee.mh_distance({2, 2}, {5, 0}) == 5
+      assert Testee.mh_distance({2, 2}, {0, 7}) == 7
+      assert Testee.mh_distance({2, 2}, {0, 0}) == 4
+    end
+  end
+
   describe "on_grid?/2" do
     test "returns true for points that are on the grid" do
       test_grid = Testee.new(11, 11)
@@ -159,6 +179,46 @@ defmodule AdventOfCode.Common.Grid2DTest do
       assert Testee.fields_that_match(test_grid, &(&1 < 10)) |> Enum.count() == 42
       assert Testee.fields_that_match(test_grid, &(&1 == 9 * 9)) == [{{9, 9}, 9 * 9}]
       assert Testee.fields_that_match(test_grid, &(&1 > 100)) |> Enum.empty?()
+    end
+  end
+
+  describe "rows_that_match/2" do
+    test "returns a list of row indices that match the specified matcher" do
+      test_grid = Testee.new_from_input("abcdef\nghijkl\nzzzzzz\nstuvwx")
+
+      assert Testee.rows_that_match(test_grid, &(&1 == "z")) == [2]
+      assert Testee.rows_that_match(test_grid, &(&1 == "a")) == []
+    end
+  end
+
+  describe "cols_that_match/2" do
+    test "returns a list of row indices that match the specified matcher" do
+      test_grid = Testee.new_from_input("abcdef\nahijkl\nanopqr\natuvwx")
+
+      assert Testee.cols_that_match(test_grid, &(&1 == "a")) == [0]
+      assert Testee.cols_that_match(test_grid, &(&1 == "z")) == []
+    end
+  end
+
+  describe "full_row_matches?/3" do
+    test "correctly identifies whether a row matches" do
+      test_grid = Testee.new_from_input("abcdef\nghijkl\nzzzzzz\nstuvwx")
+
+      assert Testee.full_row_matches?(test_grid, 0, &(&1 == "z")) == false
+      assert Testee.full_row_matches?(test_grid, 1, &(&1 == "z")) == false
+      assert Testee.full_row_matches?(test_grid, 2, &(&1 == "z")) == true
+      assert Testee.full_row_matches?(test_grid, 3, &(&1 == "z")) == false
+    end
+  end
+
+  describe "full_col_matches?/3" do
+    test "correctly identifies whether a column matches" do
+      test_grid = Testee.new_from_input("abcdef\nahijkl\nanopqr\natuvwx")
+
+      assert Testee.full_col_matches?(test_grid, 0, &(&1 == "a")) == true
+      assert Testee.full_col_matches?(test_grid, 1, &(&1 == "a")) == false
+      assert Testee.full_col_matches?(test_grid, 2, &(&1 == "a")) == false
+      assert Testee.full_col_matches?(test_grid, 3, &(&1 == "a")) == false
     end
   end
 

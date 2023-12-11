@@ -76,6 +76,22 @@ defmodule AdventOfCode.Common.Grid2D do
   end
 
   @doc """
+  Get the distance of two points on the grid.
+
+  This calculates the actual, potentially negative change between points.
+  This does not care whether or not the given points are on a valid grid.
+  """
+  def distance({ra, ca}, {rb, cb}), do: {rb - ra, cb - ca}
+
+  @doc """
+  Get the manhattan distance of two points on the grid.
+
+  See: https://en.wikipedia.org/wiki/Taxicab_geometry
+  This does not care whether or not the given points are on a valid grid.
+  """
+  def mh_distance({ra, ca}, {rb, cb}), do: abs(ra - rb) + abs(ca - cb)
+
+  @doc """
   Check whether or not a coordinate exists within the given grid
   """
   def on_grid?(%G{width: w, height: h}, {x, y}) do
@@ -93,12 +109,42 @@ defmodule AdventOfCode.Common.Grid2D do
   end
 
   @doc """
-  Get a list of fienlds and their contents where the content matches a
+  Get a list of fields and their contents where the content matches a
   specific matcher function.
   """
   def fields_that_match(%G{fields: fields}, matcher) do
     fields
     |> Enum.filter(fn {_k, v} -> matcher.(v) end)
+  end
+
+  @doc """
+  Get a list of row indices where all fields match a specific matcher function.
+  """
+  def rows_that_match(%G{height: height} = grid, matcher) do
+    0..(height - 1) |> Enum.filter(fn i -> full_row_matches?(grid, i, matcher) end)
+  end
+
+  @doc """
+  Get a list of column indices where all fields match a specific matcher function.
+  """
+  def cols_that_match(%G{width: width} = grid, matcher) do
+    0..(width - 1) |> Enum.filter(fn i -> full_col_matches?(grid, i, matcher) end)
+  end
+
+  @doc """
+  Check whether or not a whole row matches a certain matcher function
+  """
+  def full_row_matches?(%G{fields: fields}, row, matcher) do
+    row_cells = fields |> Enum.filter(fn {{r, _}, _} -> r == row end)
+    Enum.all?(row_cells, fn {_, v} -> matcher.(v) end)
+  end
+
+  @doc """
+  Check whether or not a whole column matches a certain matcher function
+  """
+  def full_col_matches?(%G{fields: fields}, col, matcher) do
+    col_cells = fields |> Enum.filter(fn {{_, c}, _} -> c == col end)
+    Enum.all?(col_cells, fn {_, v} -> matcher.(v) end)
   end
 
   @doc """
