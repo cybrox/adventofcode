@@ -26,7 +26,9 @@ defmodule AdventOfCode.Puzzles.Year2023Test do
         {Day09.PartA, 1_708_206_096},
         {Day09.PartB, 1050},
         {Day11.PartA, 9_684_228},
-        {Day11.PartB, 483_844_716_556}
+        {Day11.PartB, 483_844_716_556},
+        {Day14.PartA, 108_918},
+        {Day14.PartB, 100_310}
       ]
     )
   end
