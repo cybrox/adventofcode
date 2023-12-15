@@ -59,7 +59,9 @@ defmodule AdventOfCode.Common.Grid2DTest do
                fields: %{{0, 0} => 0, {0, 1} => 1, {1, 0} => 1, {1, 1} => 2}
              }
     end
+  end
 
+  describe "new_from_input/1" do
     test "properly creates field from a given input" do
       assert Testee.new_from_input("123\n456") == %G{
                width: 3,
@@ -85,6 +87,106 @@ defmodule AdventOfCode.Common.Grid2DTest do
                  {4, 0} => "e"
                }
              }
+    end
+  end
+
+  describe "get/2" do
+    test "returns the correct values" do
+      test_grid = Testee.new_from_input("1234\n5678\n9123\n4567")
+
+      assert Testee.get(test_grid, {0, 0}) == "1"
+      assert Testee.get(test_grid, {0, 3}) == "4"
+      assert Testee.get(test_grid, {3, 0}) == "4"
+      assert Testee.get(test_grid, {3, 3}) == "7"
+      assert Testee.get(test_grid, {2, 1}) == "1"
+    end
+
+    test "returns nil when the field does not exist" do
+      test_grid = Testee.new_from_input("1234\n5678\n9123\n4567")
+
+      assert Testee.get(test_grid, {9, 9}) == nil
+    end
+  end
+
+  describe "get_row/2" do
+    test "returns all fields in a row" do
+      test_grid = Testee.new_from_input("1234\n5678\n9123\n4567")
+
+      assert Testee.get_row(test_grid, 0) == [
+               {{0, 0}, "1"},
+               {{0, 1}, "2"},
+               {{0, 2}, "3"},
+               {{0, 3}, "4"}
+             ]
+
+      assert Testee.get_row(test_grid, 3) == [
+               {{3, 0}, "4"},
+               {{3, 1}, "5"},
+               {{3, 2}, "6"},
+               {{3, 3}, "7"}
+             ]
+    end
+
+    test "returns an empty list if the row does not exist" do
+      test_grid = Testee.new_from_input("1234\n5678\n9123\n4567")
+
+      assert Testee.get_row(test_grid, 9) == []
+    end
+  end
+
+  describe "get_col/2" do
+    test "returns all fields in a col" do
+      test_grid = Testee.new_from_input("1234\n5678\n9123\n4567")
+
+      assert Testee.get_col(test_grid, 0) == [
+               {{0, 0}, "1"},
+               {{1, 0}, "5"},
+               {{2, 0}, "9"},
+               {{3, 0}, "4"}
+             ]
+
+      assert Testee.get_col(test_grid, 3) == [
+               {{0, 3}, "4"},
+               {{1, 3}, "8"},
+               {{2, 3}, "3"},
+               {{3, 3}, "7"}
+             ]
+    end
+
+    test "returns an empty list if the col does not exist" do
+      test_grid = Testee.new_from_input("1234\n5678\n9123\n4567")
+
+      assert Testee.get_col(test_grid, 9) == []
+    end
+  end
+
+  describe "get_row_string/2" do
+    test "returns a properly sorted string representation of the row" do
+      test_grid = Testee.new_from_input("1234\n5678\n9123\n4567")
+
+      assert Testee.get_row_string(test_grid, 0) == "1234"
+      assert Testee.get_row_string(test_grid, 3) == "4567"
+    end
+
+    test "returns nil if the row does not exist" do
+      test_grid = Testee.new_from_input("1234\n5678\n9123\n4567")
+
+      assert Testee.get_row_string(test_grid, 9) == nil
+    end
+  end
+
+  describe "get_col_string/2" do
+    test "returns a properly sorted string representation of the col" do
+      test_grid = Testee.new_from_input("1234\n5678\n9123\n4567")
+
+      assert Testee.get_col_string(test_grid, 0) == "1594"
+      assert Testee.get_col_string(test_grid, 3) == "4837"
+    end
+
+    test "returns nil if the col does not exist" do
+      test_grid = Testee.new_from_input("1234\n5678\n9123\n4567")
+
+      assert Testee.get_col_string(test_grid, 9) == nil
     end
   end
 

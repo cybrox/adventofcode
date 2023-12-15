@@ -45,6 +45,25 @@ defmodule AdventOfCode.Common.Grid2D do
     new(width, height, fn {r, c} -> lines |> Enum.at(r) |> String.at(c) end)
   end
 
+  def get(%G{fields: fields}, p), do: Map.get(fields, p)
+
+  def get_row(%G{fields: fields}, row), do: fields |> Enum.filter(fn {{r, _}, _} -> r == row end)
+
+  def get_col(%G{fields: fields}, col), do: fields |> Enum.filter(fn {{_, c}, _} -> c == col end)
+
+  def get_row_string(grid, row), do: grid |> get_row(row) |> get_field_string()
+
+  def get_col_string(grid, col), do: grid |> get_col(col) |> get_field_string()
+
+  defp get_field_string([]), do: nil
+
+  defp get_field_string(fields) do
+    fields
+    |> Enum.sort_by(fn {k, _} -> k end)
+    |> Enum.map(fn {_, v} -> v end)
+    |> Enum.join("")
+  end
+
   @doc """
   Debug print a field
   """
