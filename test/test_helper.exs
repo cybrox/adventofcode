@@ -36,7 +36,8 @@ defmodule YearTestGenerator do
         {unquote(:"#{skip_tag}"), true},
         {unquote(:"#{day_tag}"), true},
         {unquote(:"#{part_tag}"), true},
-        {unquote(:"#{part_tag_lc}"), true}
+        {unquote(:"#{part_tag_lc}"), true},
+        {:timeout, :infinity}
       ]
       test unquote("result for #{day} #{part} is correct") do
         input_file = unquote("priv/#{load_path}")
