@@ -45,14 +45,34 @@ defmodule AdventOfCode.Common.Grid2D do
     new(width, height, fn {r, c} -> lines |> Enum.at(r) |> String.at(c) end)
   end
 
+  @doc """
+  Get the value of a specific field in the grid.
+  If the given field is not inside the grid, this returns `nil`.
+  """
   def get(%G{fields: fields}, p), do: Map.get(fields, p)
 
+  @doc """
+  Get the values of a row in the grid as a list.
+  If the given row is outside the grid, this returns `[]`.
+  """
   def get_row(%G{fields: fields}, row), do: fields |> Enum.filter(fn {{r, _}, _} -> r == row end)
 
+  @doc """
+  Get the values of a column in the grid as a list.
+  If the given column is outside the grid, this returns `[]`.
+  """
   def get_col(%G{fields: fields}, col), do: fields |> Enum.filter(fn {{_, c}, _} -> c == col end)
 
+  @doc """
+  Get the values of a row in the grid as a string.
+  If the given row is outside the grid, this returns `""`.
+  """
   def get_row_string(grid, row), do: grid |> get_row(row) |> get_field_string()
 
+  @doc """
+  Get the values of a column in the grid as a string.
+  If the given column is outside the grid, this returns `""`.
+  """
   def get_col_string(grid, col), do: grid |> get_col(col) |> get_field_string()
 
   defp get_field_string([]), do: nil
