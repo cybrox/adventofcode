@@ -88,6 +88,31 @@ defmodule AdventOfCode.Common.Grid2DTest do
                }
              }
     end
+
+    test "allows applying a custom mapper to every field" do
+      assert Testee.new_from_input("1234\n5678\n9123\n4567", &String.to_integer/1) == %G{
+               width: 4,
+               height: 4,
+               fields: %{
+                 {0, 0} => 1,
+                 {0, 1} => 2,
+                 {0, 2} => 3,
+                 {0, 3} => 4,
+                 {1, 0} => 5,
+                 {1, 1} => 6,
+                 {1, 2} => 7,
+                 {1, 3} => 8,
+                 {2, 0} => 9,
+                 {2, 1} => 1,
+                 {2, 2} => 2,
+                 {2, 3} => 3,
+                 {3, 0} => 4,
+                 {3, 1} => 5,
+                 {3, 2} => 6,
+                 {3, 3} => 7
+               }
+             }
+    end
   end
 
   describe "get/2" do
@@ -105,6 +130,13 @@ defmodule AdventOfCode.Common.Grid2DTest do
       test_grid = Testee.new_from_input("1234\n5678\n9123\n4567")
 
       assert Testee.get(test_grid, {9, 9}) == nil
+    end
+
+    test "allows passing a custom default value" do
+      test_grid = Testee.new_from_input("1234\n5678\n9123\n4567")
+
+      assert Testee.get(test_grid, {9, 9}, 0) == 0
+      assert Testee.get(test_grid, {9, 9}, 9) == 9
     end
   end
 

@@ -37,19 +37,20 @@ defmodule AdventOfCode.Common.Grid2D do
   Generate a new 2D grid from an input string.
   This will determine the width and height based on the number of lines and their length.
   """
-  def new_from_input(input) do
+  def new_from_input(input, mapper \\ & &1) do
     lines = input |> Input.split_by_line(trim: true)
     width = lines |> Enum.at(0) |> byte_size()
     height = lines |> Enum.count()
 
-    new(width, height, fn {r, c} -> lines |> Enum.at(r) |> String.at(c) end)
+    new(width, height, fn {r, c} -> lines |> Enum.at(r) |> String.at(c) |> mapper.() end)
   end
 
   @doc """
   Get the value of a specific field in the grid.
   If the given field is not inside the grid, this returns `nil`.
+  Optionally, a default value `default` can be passed to be used instead of `nil`.
   """
-  def get(%G{fields: fields}, p), do: Map.get(fields, p)
+  def get(%G{fields: fields}, p, default \\ nil), do: Map.get(fields, p, default)
 
   @doc """
   Get the values of a row in the grid as a list.
